@@ -1,0 +1,90 @@
+import java.util.Scanner;
+
+public class Gasolinera {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int numeroDeCargas = 0;
+        double acumuladorLitros = 0;
+        double acumuladorImporteBruto = 0;
+        double acumuladorTotalCobrado = 0;
+        int cargasConDescuento = 0;
+        char continuar;
+
+        System.out.println("Registro de combustible");
+
+        do {
+            double litros = 0;
+            double precioPorLitro = 0;
+
+            while (true) {
+                System.out.print("Ingrese los litros cargados (> 0): ");
+                if (scanner.hasNextDouble()) {
+                    litros = scanner.nextDouble();
+                    if (litros > 0) {
+                        break;
+                    } else {
+                        System.out.println("Error: Los litros deben ser mayores que cero.");
+                    }
+                } else {
+                    System.out.println("La cantidad es invalida");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                System.out.print("Ingrese el precio por litro (> 0): ");
+                if (scanner.hasNextDouble()) {
+                    precioPorLitro = scanner.nextDouble();
+                    if (precioPorLitro > 0) {
+                        break;
+                    } else {
+                        System.out.println("Error: El precio debe ser mayor que cero.");
+                    }
+                } else {
+                    System.out.println("La cantidad es invalida");
+                    scanner.next();
+                }
+            }
+
+            double importeBruto = litros * precioPorLitro;
+            double totalPagar = importeBruto;
+            double descuento = 0;
+
+            if (litros >= 40) {
+                descuento = importeBruto * 0.05;
+                totalPagar = importeBruto - descuento;
+                cargasConDescuento++;
+                System.out.println("-> ¡Aplica descuento del 5%! Descuento aplicado: $" + String.format("%.2f", descuento));
+            }
+
+            numeroDeCargas++;
+            acumuladorLitros += litros;
+            acumuladorImporteBruto += importeBruto;
+            acumuladorTotalCobrado += totalPagar;
+
+            System.out.println("-> Importe a pagar por esta carga: $" + String.format("%.2f", totalPagar));
+
+            // Preguntar si desea registrar otra carga
+            System.out.print("¿Desea registrar otra carga? (S/N): ");
+            continuar = scanner.next().charAt(0);
+
+        } while (continuar == 'S' || continuar == 's');
+
+        System.out.println("registro total");
+        System.out.println("Total de cargas registradas: " + numeroDeCargas);
+        System.out.println("Total de litros vendidos: " + String.format("%.2f", acumuladorLitros) + " L");
+        System.out.println("Importe total (sin descuentos): $" + String.format("%.2f", acumuladorImporteBruto));
+        System.out.println("Total cobrado (con descuentos): $" + String.format("%.2f", acumuladorTotalCobrado));
+        System.out.println("Cargas que recibieron descuento: " + cargasConDescuento);
+
+        if (numeroDeCargas > 0) {
+            double importePromedioPorCarga = acumuladorTotalCobrado / numeroDeCargas;
+            System.out.println("Importe promedio por carga: $" + String.format("%.2f", importePromedioPorCarga));
+        } else {
+            System.out.println("No se registraron cargas.");
+        }
+
+        scanner.close();
+    }
+}
